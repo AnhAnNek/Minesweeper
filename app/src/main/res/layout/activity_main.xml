@@ -6,65 +6,83 @@
     android:layout_height="match_parent"
     android:hardwareAccelerated="false"
     android:largeHeap="true"
-    tools:context=".MainActivity"
+    tools:context=".activites.MainActivity"
     android:orientation="horizontal">
 
-    <TableRow
-        android:id="@+id/toolbar_tr"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/flag_iv"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:padding="@dimen/_1sdp"
+        android:background="@drawable/red_flag_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/flags_tv"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/border"
+        android:text="10"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_23ssp"
+        app:layout_constraintTop_toTopOf="@id/refresh_iv"
+        app:layout_constraintBottom_toBottomOf="@id/refresh_iv"
+        app:layout_constraintEnd_toEndOf="@id/refresh_iv"
+        />
+
+    <ImageView
+        android:id="@+id/refresh_iv"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:padding="@dimen/_1sdp"
+        android:background="@drawable/smile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:format="%s"
+        android:textSize="@dimen/_23ssp"
+        app:layout_constraintStart_toEndOf="@id/refresh_iv"
+        app:layout_constraintTop_toTopOf="@id/refresh_iv"
+        app:layout_constraintBottom_toBottomOf="@id/refresh_iv"
+        />
+
+    <ImageView
+        android:id="@+id/setting_iv"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:padding="@dimen/_1sdp"
+        android:background="@drawable/setting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:background="@drawable/border"
+        android:padding="@dimen/_40sdp"
+        app:layout_constraintTop_toTopOf="@id/refresh_iv"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" >
-
-        <ImageView
-            android:id="@+id/flag_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/red_flag_btn" />
-
-        <TextView
-            android:id="@+id/flags_tv"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="10"
-            android:textColor="@color/black"
-            android:textSize="28sp" />
-
-        <ImageView
-            android:id="@+id/refresh_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/smile" />
-
-        <Chronometer
-            android:id="@+id/chronometer"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:format="%s"
-            android:textSize="26sp" />
-
-        <ImageView
-            android:id="@+id/setting_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/setting"/>
-    </TableRow>
 
     <TableLayout
         android:id="@+id/mines_tl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="300dp"
-        android:minHeight="300dp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/border"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_tr"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:minWidth="@dimen/_300sdp"
+        android:minHeight="@dimen/_300sdp"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:background="@drawable/border" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

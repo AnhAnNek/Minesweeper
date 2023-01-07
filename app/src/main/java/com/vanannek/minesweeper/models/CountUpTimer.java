@@ -1,4 +1,4 @@
-package com.vanannek.minesweeper;
+package com.vanannek.minesweeper.models;
 
 import android.os.SystemClock;
 import android.widget.Chronometer;
@@ -16,7 +16,12 @@ public class CountUpTimer {
 
     public static CountUpTimer getInstance() {
         if (instance == null) {
-            instance = new CountUpTimer();
+            //synchronized block to remove overhead
+            synchronized (CountUpTimer.class) {
+                if (instance == null) {
+                    instance = new CountUpTimer();
+                }
+            }
         }
         return instance;
     }

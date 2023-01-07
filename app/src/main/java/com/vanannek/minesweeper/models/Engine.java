@@ -1,4 +1,4 @@
-package com.vanannek.minesweeper;
+package com.vanannek.minesweeper.models;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,24 +7,38 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.utilities.Position;
 import com.vanannek.minesweeper.utilities.Utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-public class Minesweeper {
+public class Engine {
 
-    public static final int LOST = 99;
-    public static final int WIN = 100;
-    public static final int FLAG_CHANGE = 101;
+    private static Engine instance = null;
 
-    public static final int MINES_CELL = 10;
-    public static final int FLAG_CELL = 9;
-    public static final int UNTOUCHED_CELL = -1;
+    private Engine() {
+    }
+
+    public static Engine getInstance() {
+        if (instance == null) {
+            synchronized (Engine.class) {
+                if (instance == null) {
+                    instance = new Engine();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private final int MINES_CELL = 10;
+    private final int FLAG_CELL = 9;
+    private final int UNTOUCHED_CELL = -1;
 
     private Context context;
 
@@ -36,30 +50,27 @@ public class Minesweeper {
     private Map<Integer, Drawable> images;
     private ImageView[][] gameTable;
 
-    public Minesweeper(Context context, int row, int column, int mines) {
-        this.context = context;
-        this.row = row;
-        this.column = column;
-        this.mines = mines;
-    }
-
-    public Minesweeper(Context context, GameMode gameMode) {
-        this(context, gameMode.ROW, gameMode.COLUMN, gameMode.MINES);
-    }
-
-    public void startGame() {
-        this.flags = mines;
-        this.moves = row * column - mines;
+    public void startGame(Context context, GameMode gameMode) {
+        setValues(context, gameMode.ROW, gameMode.COLUMN, gameMode.MINES);
         initImages();
         initMinesTable();
         initGameTable();
         setImageForTable();
     }
 
+    private void setValues(Context context, int row, int column, int mines) {
+        this.context = context;
+        this.row = row;
+        this.column = column;
+        this.mines = mines;
+        this.flags = mines;
+        this.moves = row * column - mines;
+    }
+
     private void initImages() {
         Resources res = context.getResources();
         images = new HashMap<>();
-        images.put(Minesweeper.MINES_CELL, res.getDrawable(R.drawable.bomb));
+        images.put(MINES_CELL, res.getDrawable(R.drawable.bomb));
         images.put(FLAG_CELL, res.getDrawable(R.drawable.flag));
         images.put(UNTOUCHED_CELL, res.getDrawable(R.drawable.untouched));
         images.put(0, res.getDrawable(R.drawable.border));
@@ -73,7 +84,7 @@ public class Minesweeper {
         images.put(8, res.getDrawable(R.drawable.eight));
     }
 
-    public void initGameTable() {
+    private void initGameTable() {
         gameTable = new ImageView[row][column];
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.column; j++) {
@@ -86,10 +97,13 @@ public class Minesweeper {
 
     private void initMinesTable() {
         minesTable = new int[this.row][this.column];
+        randomMines();
+        countMinesAround();
+    }
+
+    private void randomMines() {
         int row, col, countMines = 0;
         Random random = new Random();
-
-        // random mines
         while (countMines < mines) {
             row = random.nextInt(this.row);
             col = random.nextInt(this.column);
@@ -97,14 +111,13 @@ public class Minesweeper {
             minesTable[row][col] = MINES_CELL;
             countMines++;
         }
+    }
 
-        // generate number
-        int nextI, nextJ;
+    private void countMinesAround() {
+        int nextI, nextJ, countMines;
         for (int i = 0; i < minesTable.length; i++) {
             for (int j = 0; j < minesTable[0].length; j++) {
                 if (isMines(i, j)) continue;
-
-                // count around
                 countMines = 0;
                 for (int k = 0; k < aroundX.length; k++) {
                     nextI = i + aroundX[k];
@@ -140,15 +153,15 @@ public class Minesweeper {
                 gameTable[row][column].setImageDrawable( images.get(UNTOUCHED_CELL) );
                 flags++;
             }
-            return FLAG_CHANGE;
+            return Utils.FLAG_CHANGE;
         }
 
         if (temp && isMines(row, column)) {
-            return LOST;
+            return Utils.LOST;
         } else if (temp) {
             show(row, column);
             if (isWin())
-                return WIN;
+                return Utils.WIN;
         }
         return 0;
     }

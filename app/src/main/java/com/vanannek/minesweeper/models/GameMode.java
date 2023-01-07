@@ -1,9 +1,9 @@
-package com.vanannek.minesweeper;
+package com.vanannek.minesweeper.models;
 
 public enum GameMode {
-    Easy(10, 9, 12),
-    Normal(20, 16, 60),
-    Difficult(30, 24, 180);
+    Easy(9, 9, 12),
+    Normal(16, 9, 60),
+    Difficult(20, 10, 180);
 
     public final int ROW, COLUMN, MINES;
 
