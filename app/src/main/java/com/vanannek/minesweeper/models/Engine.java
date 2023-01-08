@@ -73,7 +73,7 @@ public class Engine {
         images.put(MINES_CELL, res.getDrawable(R.drawable.bomb));
         images.put(FLAG_CELL, res.getDrawable(R.drawable.flag));
         images.put(UNTOUCHED_CELL, res.getDrawable(R.drawable.untouched));
-        images.put(0, res.getDrawable(R.drawable.border));
+        images.put(0, res.getDrawable(R.drawable.zero));
         images.put(1, res.getDrawable(R.drawable.one));
         images.put(2, res.getDrawable(R.drawable.two));
         images.put(3, res.getDrawable(R.drawable.three));

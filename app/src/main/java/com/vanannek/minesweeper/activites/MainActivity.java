@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gameMode = GameMode.Difficult;
+        gameMode = GameMode.Easy;
         Engine.getInstance().startGame(this, gameMode);
         initToolbar();
         initGameTable();
