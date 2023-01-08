@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:hardwareAccelerated="false"
     android:largeHeap="true"
-    tools:context=".activites.MainActivity"
+    tools:context=".activities.MainActivity"
     android:orientation="horizontal">
 
     <ImageView

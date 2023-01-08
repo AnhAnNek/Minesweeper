@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_8sdp"
-    android:id="@+id/historyLayout">
+    android:id="@+id/historyItemLayout">
 
     <TextView
         android:id="@+id/result_tv"

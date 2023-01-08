@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vanannek.minesweeper.R;
+import com.vanannek.minesweeper.database.MyDatabaseHelper;
 import com.vanannek.minesweeper.models.History;
 import com.vanannek.minesweeper.utilities.Utils;
 
@@ -62,9 +62,28 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             completion_time_tv = itemView.findViewById(R.id.completion_time_tv);
             game_mode_tv = itemView.findViewById(R.id.game_mode_tv);
             date_tv = itemView.findViewById(R.id.date_tv);
-            historyLayout = itemView.findViewById(R.id.historyLayout);
+            historyLayout = itemView.findViewById(R.id.historyItemLayout);
 
             // Animation Recyclerview
         }
+    }
+
+    public void removeItem(int position) {
+        // delete into database
+        MyDatabaseHelper myDB = new MyDatabaseHelper(context);
+        myDB.deleteOneRow(itemsHistory.get(position).id);
+
+        itemsHistory.remove(position);
+
+        // this will update recyclerview means refresh it
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(History history, int position) {
+        itemsHistory.add(position, history);
+        MyDatabaseHelper myDB = new MyDatabaseHelper(context);
+        myDB.add(history.completeTime, Utils.formatDate.format(history.date),
+                history.gameMode, history.result);
+        notifyItemInserted(position);
     }
 }

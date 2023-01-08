@@ -10,4 +10,6 @@
     <color name="grey">#808080</color>
     <color name="input_background">#ECECEC</color>
     <color name="icon_background">#20FFFFFF</color>
+
+    <color name="delete_color">#EF0707</color>
 </resources>

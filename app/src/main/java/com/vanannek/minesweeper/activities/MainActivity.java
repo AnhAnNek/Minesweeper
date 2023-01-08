@@ -1,4 +1,4 @@
-package com.vanannek.minesweeper.activites;
+package com.vanannek.minesweeper.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vanannek.minesweeper.database.MyDatabaseHelper;
 import com.vanannek.minesweeper.models.CountUpTimer;
