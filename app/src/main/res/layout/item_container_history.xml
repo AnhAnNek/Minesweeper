@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historyItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/_8sdp"
-    android:id="@+id/historyItemLayout">
+    android:padding="@dimen/_8sdp">
 
     <TextView
         android:id="@+id/result_tv"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:gravity="center"
-        android:text="Win"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-        android:textStyle="bold"
         android:background="@drawable/background_image"
+        android:gravity="center"
+        android:text="Lost"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        android:fontFamily="@font/minecraft_bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,9 +36,10 @@
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:text="00:00"
-        android:textSize="@dimen/_16ssp"
         android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
+        android:fontFamily="@font/minecraft_regular"
         app:layout_constraintBottom_toTopOf="@id/view_supporter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/result_tv" />
@@ -47,16 +49,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        app:layout_constraintTop_toBottomOf="@id/view_supporter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/result_tv">
+        app:layout_constraintStart_toEndOf="@id/result_tv"
+        app:layout_constraintTop_toBottomOf="@id/view_supporter">
 
         <TextView
             android:id="@+id/game_mode_tv"
             android:layout_width="@dimen/_70sdp"
             android:layout_height="wrap_content"
             android:text="Easy"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_13ssp"
+            android:fontFamily="@font/minecraft_regular" />
 
         <TextView
             android:id="@+id/date_tv"
@@ -64,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="12/12/2022 12:34"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_13ssp"
+            android:fontFamily="@font/minecraft_regular" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

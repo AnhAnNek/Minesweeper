@@ -1,70 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/historyLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historyLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/border"
+    android:background="@drawable/background_primary"
     tools:context=".activities.HistoryActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_back"
+        android:id="@+id/backImg"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:padding="@dimen/_6sdp"
         android:background="@drawable/background_icon"
+        android:padding="@dimen/_6sdp"
+        android:soundEffectsEnabled="false"
         android:src="@drawable/ic_back"
+        android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/titleTxt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/black" />
+        app:layout_constraintTop_toTopOf="@+id/titleTxt" />
 
     <TextView
+        android:id="@+id/titleTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_22sdp"
         android:text="History"
         android:textColor="@color/black"
-        android:textSize="@dimen/_14ssp"
+        android:textSize="@dimen/_18ssp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/image_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/image_back" />
-
-    <ImageView
-        android:id="@+id/empty_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_250sdp"
-        android:alpha="0.1"
-        app:srcCompat="@drawable/ic_empty"
-        android:focusable="true"
+        android:fontFamily="@font/minecraft_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/empty_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:text="No Data."
-        android:textSize="@dimen/_22sdp"
-        android:alpha="0.4"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/binImg"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:background="@drawable/background_icon"
+        android:padding="@dimen/_6sdp"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/black"
+        android:soundEffectsEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty_iv" />
+        app:layout_constraintTop_toTopOf="@id/titleTxt"
+        app:layout_constraintBottom_toBottomOf="@id/titleTxt" />
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_16sdp"
         android:background="@drawable/background_content_bottom"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_back">
+        app:layout_constraintTop_toBottomOf="@id/backImg">
+
+        <ImageView
+            android:id="@+id/emptyImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.1"
+            android:focusable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/historyRecyclerView"
+            app:srcCompat="@drawable/ic_empty" />
+
+        <TextView
+            android:id="@+id/emptyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:alpha="0.4"
+            android:text="No Data"
+            android:textSize="@dimen/_22sdp"
+            android:fontFamily="@font/minecraft_bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/emptyImg"
+            app:layout_constraintStart_toStartOf="@id/emptyImg"
+            app:layout_constraintTop_toBottomOf="@+id/emptyImg" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historyRecyclerView"
@@ -75,6 +94,5 @@
             android:overScrollMode="never"
             android:padding="@dimen/_16sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </FrameLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

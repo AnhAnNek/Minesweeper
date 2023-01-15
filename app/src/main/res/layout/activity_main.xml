@@ -4,77 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:hardwareAccelerated="false"
-    android:largeHeap="true"
-    tools:context=".activities.MainActivity"
-    android:orientation="horizontal">
+    android:background="@drawable/background_primary_border"
+    android:orientation="horizontal"
+    android:padding="@dimen/_8sdp"
+    tools:context=".activities.MainActivity">
 
-    <ImageView
-        android:id="@+id/flag_iv"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:padding="@dimen/_1sdp"
-        android:background="@drawable/red_flag_btn"
-        app:layout_constraintTop_toTopOf="@id/flags_tv"
-        app:layout_constraintBottom_toBottomOf="@id/flags_tv"
-        app:layout_constraintEnd_toStartOf="@id/flags_tv" />
-
-    <TextView
-        android:id="@+id/flags_tv"
-        android:layout_width="@dimen/_80sdp"
+    <LinearLayout
+        android:id="@+id/toolbar_ll"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="10"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_23ssp"
-        app:layout_constraintTop_toTopOf="@id/refresh_iv"
-        app:layout_constraintBottom_toBottomOf="@id/refresh_iv"
-        app:layout_constraintEnd_toStartOf="@id/refresh_iv" />
-
-    <ImageView
-        android:id="@+id/refresh_iv"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:padding="@dimen/_1sdp"
-        android:background="@drawable/smile"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Chronometer
-        android:id="@+id/chronometer"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:format="%s"
-        android:textSize="@dimen/_23ssp"
-        app:layout_constraintStart_toEndOf="@id/refresh_iv"
-        app:layout_constraintTop_toTopOf="@id/refresh_iv"
-        app:layout_constraintBottom_toBottomOf="@id/refresh_iv" />
+        <ImageView
+            android:id="@+id/flagImg"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/red_flag_btn"
+            android:padding="@dimen/_1sdp"
+            android:soundEffectsEnabled="false" />
 
-    <ImageView
-        android:id="@+id/setting_iv"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:padding="@dimen/_1sdp"
-        android:background="@drawable/setting"
-        app:layout_constraintTop_toTopOf="@id/chronometer"
-        app:layout_constraintBottom_toBottomOf="@id/chronometer"
-        app:layout_constraintStart_toEndOf="@id/chronometer" />
+        <TextView
+            android:id="@+id/flagsTxt"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/minecraft_bold"
+            android:gravity="center"
+            android:text="10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_23ssp" />
+
+        <ImageView
+            android:id="@+id/refreshImg"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/smile"
+            android:padding="@dimen/_1sdp"
+            android:soundEffectsEnabled="false" />
+
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/minecraft_bold"
+            android:format="%s"
+            android:gravity="center"
+            android:textSize="@dimen/_23ssp" />
+
+        <ImageView
+            android:id="@+id/settingImg"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/setting"
+            android:padding="@dimen/_1sdp"
+            android:soundEffectsEnabled="false" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/refresh_iv"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_ll">
 
         <TableLayout
-            android:id="@+id/mines_tl"
+            android:id="@+id/minesTableLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="@dimen/_4sdp"
-            android:background="@drawable/border" />
+            android:background="@drawable/background_primary_border"
+            android:padding="@dimen/_4sdp" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,5 @@
 package com.vanannek.minesweeper.activities;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,11 +12,16 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.vanannek.minesweeper.database.MyDatabaseHelper;
-import com.vanannek.minesweeper.models.CountUpTimer;
-import com.vanannek.minesweeper.models.GameMode;
-import com.vanannek.minesweeper.models.Engine;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.vanannek.minesweeper.R;
+import com.vanannek.minesweeper.database.MyDatabaseHelper;
+import com.vanannek.minesweeper.models.ClickSound;
+import com.vanannek.minesweeper.models.CountUpTimer;
+import com.vanannek.minesweeper.models.Engine;
+import com.vanannek.minesweeper.models.GameMode;
+import com.vanannek.minesweeper.models.MainSound;
 import com.vanannek.minesweeper.utilities.Utils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,50 +29,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int CELL_DIMENSION = 100;
     private final int CELL_PADDING = 2;
 
-    private TextView flags_tv;
-    private TableLayout mines_tl;
-    private ImageView flag_iv, refresh_iv, setting_iv;
+    private TextView flagsTxt;
+    private TableLayout minesTableLayout;
+    private ImageView flagImg, refreshImg, settingImg;
 
-    private GameMode gameMode;
     private MyDatabaseHelper myDB;
+    private boolean firstClick = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gameMode = GameMode.Easy;
-        Engine.getInstance().startGame(this, gameMode);
+        MainSound.getInstance().init(this);
+        MainSound.getInstance().start();
+
+        Engine.getInstance().init(this, Utils.gameMode);
         initToolbar();
+        setToolbarListeners();
         initGameTable();
         myDB = new MyDatabaseHelper(this);
 
-        printMinesTableInLog();
-
         CountUpTimer.getInstance().setView( findViewById(R.id.chronometer) );
-        CountUpTimer.getInstance().start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initToolbar() {
-        flags_tv = findViewById(R.id.flags_tv);
-        flag_iv = findViewById(R.id.flag_iv);
-        refresh_iv = findViewById(R.id.refresh_iv);
-        setting_iv = findViewById(R.id.setting_iv);
-        flag_iv.setOnClickListener(v -> {
+        flagsTxt = findViewById(R.id.flagsTxt);
+        flagImg = findViewById(R.id.flagImg);
+        refreshImg = findViewById(R.id.refreshImg);
+        settingImg = findViewById(R.id.settingImg);
+    }
+
+    private void setToolbarListeners() {
+        flagImg.setOnClickListener(v -> {
+            ClickSound.getInstance().play();
             if (Engine.getInstance().isTurnOnFlag()) {
                 Engine.getInstance().setTurnOnFlag(false);
-                flag_iv.setImageDrawable(getResources().getDrawable(R.drawable.red_flag_btn));
+                flagImg.setImageDrawable(getResources().getDrawable(R.drawable.red_flag_btn));
             } else {
                 Engine.getInstance().setTurnOnFlag(true);
-                flag_iv.setImageDrawable(getResources().getDrawable(R.drawable.green_flag_btn));
+                flagImg.setImageDrawable(getResources().getDrawable(R.drawable.green_flag_btn));
             }
         });
-        refresh_iv.setOnClickListener(v -> refreshGame());
-        setting_iv.setOnClickListener(v -> {
-            Intent intent = new Intent(this, HistoryActivity.class);
+        refreshImg.setOnClickListener(v -> {
+            ClickSound.getInstance().play();
+            Intent intent = new Intent(this, MenuActivity.class);
             startActivity(intent);
         });
-        flags_tv.setText(String.valueOf(Engine.getInstance().getFlags()));
+        settingImg.setOnClickListener(v -> {
+            ClickSound.getInstance().play();
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+//            Intent intent = new Intent(this, HistoryActivity.class);
+//            startActivity(intent);
+//            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
+        flagsTxt.setText(String.valueOf(Engine.getInstance().getFlags()));
     }
 
     private void printMinesTableInLog() {
@@ -78,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initGameTable() {
-        mines_tl = findViewById(R.id.mines_tl);
+        minesTableLayout = findViewById(R.id.minesTableLayout);
         int row = Engine.getInstance().getRow(), column = Engine.getInstance().getColumn();
         ImageView[][] gameTable = Engine.getInstance().getGameTable();
         for (int i = 0; i < row; i++) {
@@ -93,10 +112,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         CELL_DIMENSION + 2 * CELL_PADDING,
                         CELL_DIMENSION + 2 * CELL_PADDING));
                 gameTable[i][j].setPadding(CELL_PADDING, CELL_PADDING, CELL_PADDING, CELL_PADDING);
-                gameTable[i][j].setBackground( getResources().getDrawable(R.drawable.border) );
+                gameTable[i][j].setBackground( getResources().getDrawable(R.drawable.background_primary_border) );
                 tableRow.addView(gameTable[i][j]);
             }
-            mines_tl.addView(tableRow, new TableRow.LayoutParams(
+            minesTableLayout.addView(tableRow, new TableRow.LayoutParams(
                     (CELL_DIMENSION + 2 * CELL_PADDING) * column,
                     CELL_DIMENSION + 2 * CELL_PADDING));
         }
@@ -104,18 +123,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        ClickSound.getInstance().play();
         Pair<Integer, Integer> pos = (Pair) v.getTag();
+        if (firstClick) {
+            Engine.getInstance().startGame(pos.first, pos.second);
+            CountUpTimer.getInstance().start();
+
+            printMinesTableInLog();
+
+            firstClick = false;
+        }
+
         int result = Engine.getInstance().openCellProcess(pos.first, pos.second);
         if (result == Utils.WIN) {
             myDB.add(CountUpTimer.getInstance().getCurrentTime(),
-                    Utils.getCurrentDate(), String.valueOf(gameMode), "Win");
+                    Utils.getCurrentDate(), String.valueOf(Utils.gameMode), "Win");
             confirmGameWin();
         } else if (result == Utils.LOST) {
             myDB.add(CountUpTimer.getInstance().getCurrentTime(),
-                    Utils.getCurrentDate(), String.valueOf(gameMode), "Lost");
+                    Utils.getCurrentDate(), String.valueOf(Utils.gameMode), "Lost");
             confirmGameLost();
         } else if (result == Utils.FLAG_CHANGE) {
-            flags_tv.setText(String.valueOf(Engine.getInstance().getFlags()));
+            flagsTxt.setText(String.valueOf(Engine.getInstance().getFlags()));
         } else {
             Log.i("Main", String.valueOf(Engine.getInstance().getMoves()));
         }
@@ -123,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void confirmGameLost() {
         CountUpTimer.getInstance().stop();
-        refresh_iv.setImageDrawable( getResources().getDrawable(R.drawable.sad) );
+        refreshImg.setImageDrawable( getResources().getDrawable(R.drawable.sad) );
         Engine.getInstance().showAllMines();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -161,10 +190,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void refreshGame() {
+        firstClick = true;
         Engine.getInstance().refresh();
-        flags_tv.setText(String.valueOf(Engine.getInstance().getFlags()));
-        refresh_iv.setImageDrawable( getResources().getDrawable(R.drawable.smile) );
-        CountUpTimer.getInstance().restart();
+        flagImg.setImageDrawable( getResources().getDrawable(R.drawable.red_flag_btn) );
+        flagsTxt.setText(String.valueOf(Engine.getInstance().getFlags()));
+        refreshImg.setImageDrawable( getResources().getDrawable(R.drawable.smile) );
+        CountUpTimer.getInstance().reset();
 
         printMinesTableInLog();
     }

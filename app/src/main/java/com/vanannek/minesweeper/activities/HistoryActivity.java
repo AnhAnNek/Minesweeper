@@ -1,13 +1,7 @@
 package com.vanannek.minesweeper.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -15,6 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.vanannek.minesweeper.R;
@@ -32,10 +35,10 @@ import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity implements HistoryListener {
 
-    private AppCompatImageView image_back;
+    private AppCompatImageView backImg, binImg;
     private RecyclerView historyRecyclerView;
-    private ImageView empty_iv;
-    private TextView empty_tv;
+    private ImageView emptyImg;
+    private TextView emptyTxt;
     private MyDatabaseHelper myDB;
     private List<History> itemsHistory;
     private HistoryAdapter historyAdapter;
@@ -46,14 +49,22 @@ public class HistoryActivity extends AppCompatActivity implements HistoryListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        image_back = findViewById(R.id.image_back);
+        backImg = findViewById(R.id.backImg);
+        binImg = findViewById(R.id.binImg);
         historyRecyclerView = findViewById(R.id.historyRecyclerView);
-        empty_iv = findViewById(R.id.empty_iv);
-        empty_tv = findViewById(R.id.empty_tv);
+        emptyImg = findViewById(R.id.emptyImg);
+        emptyTxt = findViewById(R.id.emptyTxt);
         historyLayout = findViewById(R.id.historyLayout);
-        image_back.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
+        backImg.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingActivity.class);
             startActivity(intent);
+        });
+        binImg.setOnClickListener(v -> {
+            if (itemsHistory.isEmpty()) {
+                Toast.makeText(this, "Haven't element to delete!!!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            confirmDeleteAll();
         });
 
         myDB = new MyDatabaseHelper(this);
@@ -67,15 +78,39 @@ public class HistoryActivity extends AppCompatActivity implements HistoryListene
         touchHelper.attachToRecyclerView(historyRecyclerView);
     }
 
-    public void initHistoryItems() {
+    private void confirmDeleteAll() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete all !");
+        builder.setMessage("Are you want to delete all history?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                myDB.deleteAllData();
+                reloadActivity();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.create().show();
+    }
+
+    private void reloadActivity() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    private void initHistoryItems() {
         itemsHistory = new ArrayList<>();
         Cursor cursor = myDB.readAllData();
         if (cursor == null || cursor.getCount() == 0) {
-            empty_iv.setVisibility(View.VISIBLE);
-            empty_tv.setVisibility(View.VISIBLE);
+            emptyImg.setVisibility(View.VISIBLE);
+            emptyTxt.setVisibility(View.VISIBLE);
         } else {
-            empty_iv.setVisibility(View.GONE);
-            empty_tv.setVisibility(View.GONE);
+            emptyImg.setVisibility(View.GONE);
+            emptyTxt.setVisibility(View.GONE);
             while (cursor.moveToNext()) {
                 History history = new History();
                 history.id = cursor.getString(0);
