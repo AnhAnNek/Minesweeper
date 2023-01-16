@@ -20,4 +20,26 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
+
+    <style name="FragmentDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+        <item name="windowMinWidthMajor">85%</item>
+        <item name="android:windowAnimationStyle">@style/AnimFragmentDialog</item>
+    </style>
+
+    <style name="AnimFragmentDialog">
+        <item name="android:windowEnterAnimation">@anim/slide_scale_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+        <item name="windowMinWidthMajor">85%</item>
+        <item name="android:windowAnimationStyle">@style/AnimAlertDialog</item>
+    </style>
+
+    <style name="AnimAlertDialog">
+        <item name="android:windowEnterAnimation">@anim/slide_scale_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_scale_out</item>
+    </style>
 </resources>

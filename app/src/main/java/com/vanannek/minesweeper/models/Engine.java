@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.utilities.Utils;
@@ -40,7 +43,8 @@ public class Engine {
 
     private Context context;
 
-    private int row, column, mines, flags, moves;
+    private GameMode gameMode;
+    private int flags, moves;
     private boolean turnOnFlag = false;
     private int aroundX[] = {-1, -1, -1, 0, 1, 1, 1, 0};
     private int aroundY[] = {-1, 0, 1, 1, 1, 0, -1, -1};
@@ -49,19 +53,17 @@ public class Engine {
     private ImageView[][] gameTable;
 
     public void init(Context context, GameMode gameMode) {
-        setValues(context, gameMode.ROW, gameMode.COLUMN, gameMode.MINES);
+        setValues(context, gameMode);
         initImages();
         initGameTable();
         refreshGameTable();
     }
 
-    private void setValues(Context context, int row, int column, int mines) {
+    private void setValues(Context context, GameMode gameMode) {
         this.context = context;
-        this.row = row;
-        this.column = column;
-        this.mines = mines;
-        this.flags = mines;
-        this.moves = row * column - mines;
+        this.gameMode = gameMode;
+        this.flags = getMines();
+        this.moves = getRow() * getColumn() - getMines();
     }
 
     private void initImages() {
@@ -82,9 +84,9 @@ public class Engine {
     }
 
     private void initGameTable() {
-        gameTable = new ImageView[row][column];
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.column; j++) {
+        gameTable = new ImageView[getRow()][getColumn()];
+        for (int i = 0; i < gameTable.length; i++) {
+            for (int j = 0; j < gameTable[0].length; j++) {
                 gameTable[i][j] = new ImageView(context);
                 gameTable[i][j].setTag(new Pair(i, j));
                 gameTable[i][j].setSoundEffectsEnabled(false);
@@ -93,8 +95,25 @@ public class Engine {
         }
     }
 
+    public void createGameTableLayout(TableLayout gameTableLayout, int cellSize, int cellPadding) {
+        gameTableLayout.removeAllViewsInLayout();
+        for (int i = 0; i < gameMode.ROW; i++) {
+            TableRow tableRow = new TableRow(context);
+            tableRow.setLayoutParams(new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
+            tableRow.setGravity(Gravity.CENTER);
+            for (int j = 0; j < getColumn(); j++) {
+                gameTable[i][j].setLayoutParams(new TableRow.LayoutParams(cellSize, cellSize));
+                gameTable[i][j].setPadding(cellPadding, cellPadding, cellPadding, cellPadding);
+                gameTable[i][j].setBackground(
+                        context.getResources().getDrawable(R.drawable.background_primary_border));
+                tableRow.addView(gameTable[i][j]);
+            }
+            gameTableLayout.addView(tableRow, new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
+        }
+    }
+
     public void startGame(int rowNoMines, int colNoMines) {
-        minesTable = new int[this.row][this.column];
+        minesTable = new int[getRow()][getColumn()];
         randomMines(rowNoMines, colNoMines);
         generateNumber();
     }
@@ -102,9 +121,9 @@ public class Engine {
     private void randomMines(int rowNoMines, int colNoMines) {
         int row, col, countMines = 0;
         Random random = new Random();
-        while (countMines < mines) {
-            row = random.nextInt(this.row);
-            col = random.nextInt(this.column);
+        while (countMines < getMines()) {
+            row = random.nextInt( getRow() );
+            col = random.nextInt( getColumn() );
             if (isMines(row, col) || (row == rowNoMines && col == colNoMines)) continue;
             minesTable[row][col] = MINES_CELL;
             countMines++;
@@ -137,8 +156,8 @@ public class Engine {
     }
 
     public void refresh() {
-        this.flags = mines;
-        this.moves = row * column - mines;
+        this.flags = getMines();
+        this.moves = getRow() * getColumn() - getMines();
         refreshGameTable();
     }
 
@@ -148,7 +167,7 @@ public class Engine {
             if (temp && flags > 0) {
                 gameTable[row][column].setImageDrawable( images.get(FLAG_CELL) );
                 flags--;
-            } else if (isFlag(row, column) && flags < this.mines) {
+            } else if (isFlag(row, column) && flags < getMines()) {
                 gameTable[row][column].setImageDrawable( images.get(UNTOUCHED_CELL) );
                 flags++;
             }
@@ -189,8 +208,8 @@ public class Engine {
     }
 
     public void showAllMines() {
-        for (int i = 0; i < this.row; i++)
-            for (int j = 0; j < this.column; j++)
+        for (int i = 0; i < getRow(); i++)
+            for (int j = 0; j < getColumn(); j++)
                 gameTable[i][j].setImageDrawable( images.get(minesTable[i][j]) );
     }
 
@@ -199,7 +218,7 @@ public class Engine {
     }
 
     private boolean isValid(int row, int col) {
-        return row >= 0 && row < this.row && col >= 0 && col < this.column;
+        return row >= 0 && row < getRow() && col >= 0 && col < getColumn();
     }
 
     private boolean isMines(int row, int col) {
@@ -217,8 +236,8 @@ public class Engine {
     @Override
     public String toString() {
         String result = "";
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.column; j++)
+        for (int i = 0; i < getRow(); i++) {
+            for (int j = 0; j < getColumn(); j++)
                 result += String.format("%3d ", minesTable[i][j]);
             result += "\n";
         }
@@ -227,27 +246,19 @@ public class Engine {
 
     // setters/getters
     public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
+        return gameMode.ROW;
     }
 
     public int getColumn() {
-        return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
+        return gameMode.COLUMN;
     }
 
     public int getMines() {
-        return mines;
+        return gameMode.MINES;
     }
 
-    public void setMines(int mines) {
-        this.mines = mines;
+    public GameMode getGameMode() {
+        return gameMode;
     }
 
     public int getFlags() {

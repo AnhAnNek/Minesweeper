@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.models.ClickSound;
-import com.vanannek.minesweeper.models.MainSound;
+import com.vanannek.minesweeper.models.MusicPlayer;
 import com.vanannek.minesweeper.utilities.Utils;
 
 public class SettingActivity extends AppCompatActivity {
@@ -35,8 +35,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void setText() {
-        if (MainSound.getInstance().isTurnOn()) mainSoundBtn.setText(Utils.MAIN_SOUND_ON);
-        else mainSoundBtn.setText(Utils.MAIN_SOUND_OFF);
+        if (MusicPlayer.getInstance().isTurnOn()) mainSoundBtn.setText(Utils.MUSIC_ON);
+        else mainSoundBtn.setText(Utils.MUSIC_OFF);
         if (ClickSound.getInstance().isTurnOn()) clickSoundBtn.setText(Utils.CLICK_SOUND_ON);
         else clickSoundBtn.setText(Utils.CLICK_SOUND_OFF);
     }
@@ -52,14 +52,14 @@ public class SettingActivity extends AppCompatActivity {
         });
         mainSoundBtn.setOnClickListener(v -> {
             ClickSound.getInstance().play();
-            if (MainSound.getInstance().isTurnOn()) {
-                MainSound.getInstance().setTurnOn(false);
-                MainSound.getInstance().pause();
-                mainSoundBtn.setText(Utils.MAIN_SOUND_OFF);
+            if (MusicPlayer.getInstance().isTurnOn()) {
+                MusicPlayer.getInstance().setTurnOn(false);
+                MusicPlayer.getInstance().pause();
+                mainSoundBtn.setText(Utils.MUSIC_OFF);
             } else {
-                MainSound.getInstance().setTurnOn(true);
-                MainSound.getInstance().start();
-                mainSoundBtn.setText(Utils.MAIN_SOUND_ON);
+                MusicPlayer.getInstance().setTurnOn(true);
+                MusicPlayer.getInstance().start();
+                mainSoundBtn.setText(Utils.MUSIC_ON);
             }
         });
         clickSoundBtn.setOnClickListener(v -> {

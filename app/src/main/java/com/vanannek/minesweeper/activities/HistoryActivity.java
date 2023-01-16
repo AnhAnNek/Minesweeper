@@ -49,6 +49,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
         backImg = findViewById(R.id.backImg);
         binImg = findViewById(R.id.binImg);
         historyRecyclerView = findViewById(R.id.historyRecyclerView);

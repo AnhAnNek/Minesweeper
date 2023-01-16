@@ -32,12 +32,12 @@
             android:layout_gravity="center"
             android:fontFamily="@font/minecraft_bold"
             android:gravity="center"
-            android:text="10"
+            android:text="0"
             android:textColor="@color/black"
             android:textSize="@dimen/_23ssp" />
 
         <ImageView
-            android:id="@+id/refreshImg"
+            android:id="@+id/newGameImg"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:background="@drawable/smile"
