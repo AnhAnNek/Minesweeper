@@ -21,19 +21,17 @@ import java.util.List;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
     private Activity activity;
-    private Context context;
     private final List<History> itemsHistory;
 
-    public HistoryAdapter(Activity activity, Context context, List<History> itemsHistory) {
+    public HistoryAdapter(Activity activity, List<History> itemsHistory) {
         this.activity = activity;
-        this.context = context;
         this.itemsHistory = itemsHistory;
     }
 
     @NonNull
     @Override
     public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.item_container_history, parent, false);
         return new HistoryViewHolder(view);
     }
@@ -70,7 +68,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     public void removeItem(int position) {
         // delete into database
-        MyDatabaseHelper myDB = new MyDatabaseHelper(context);
+        MyDatabaseHelper myDB = new MyDatabaseHelper(activity);
         myDB.deleteOneRow(itemsHistory.get(position).id);
 
         itemsHistory.remove(position);
@@ -81,7 +79,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     public void restoreItem(History history, int position) {
         itemsHistory.add(position, history);
-        MyDatabaseHelper myDB = new MyDatabaseHelper(context);
+        MyDatabaseHelper myDB = new MyDatabaseHelper(activity);
         myDB.add(history.completeTime, Utils.formatDate.format(history.date),
                 history.gameMode, history.result);
         notifyItemInserted(position);

@@ -2,8 +2,6 @@ package com.vanannek.minesweeper.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +13,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.vanannek.minesweeper.R;
-import com.vanannek.minesweeper.activities.HistoryActivity;
 import com.vanannek.minesweeper.models.ClickSound;
-import com.vanannek.minesweeper.models.History;
 import com.vanannek.minesweeper.models.MusicPlayer;
 
 public class SettingDialog extends AppCompatDialogFragment {
@@ -48,8 +44,7 @@ public class SettingDialog extends AppCompatDialogFragment {
     private void setListeners() {
         historyBtn.setOnClickListener(v -> {
             ClickSound.getInstance().play();
-            Intent intent = new Intent(getActivity(), HistoryActivity.class);
-            startActivity(intent);
+            openHistoryDialog();
         });
         musicSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             ClickSound.getInstance().play();
@@ -67,5 +62,10 @@ public class SettingDialog extends AppCompatDialogFragment {
             sound.play();
             sound.setTurnOn( !sound.isTurnOn() );
         });
+    }
+
+    private void openHistoryDialog() {
+        HistoryDialog historyDialog = new HistoryDialog();
+        historyDialog.show(getActivity().getSupportFragmentManager(), "Select mode dialog");
     }
 }

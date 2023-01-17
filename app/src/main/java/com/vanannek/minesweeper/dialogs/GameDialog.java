@@ -1,6 +1,5 @@
 package com.vanannek.minesweeper.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

@@ -21,20 +21,10 @@ public final class Utils {
     public static final int MINUTE_PER_SECOND = 60;
     public static final int SECOND_PER_MILLISECOND = 1000;
 
-    public static final String MUSIC_OFF = "No music";
-    public static final String MUSIC_ON = "Music";
-    public static final String CLICK_SOUND_OFF = "No click sound";
-    public static final String CLICK_SOUND_ON = "Click sound";
-
-    public static final SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    public static final SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy HH:mm");
 
     public static String getCurrentDate() {
         return formatDate.format(new Date());
-    }
-
-    public static void makeButtonAnimation(Context context, Button myButton) {
-        myButton.setAnimation(AnimationUtils.loadAnimation(context, R.anim.slide_scale_in));
-        myButton.setAnimation(AnimationUtils.loadAnimation(context, R.anim.slide_scale_out));
     }
 
     public static boolean areEquals(Drawable drawable1, Drawable drawable2) {
