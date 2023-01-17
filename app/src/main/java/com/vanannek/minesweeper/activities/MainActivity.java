@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.database.MyDatabaseHelper;
 import com.vanannek.minesweeper.dialogs.GameDialog;
+import com.vanannek.minesweeper.dialogs.SettingDialog;
 import com.vanannek.minesweeper.models.ClickSound;
 import com.vanannek.minesweeper.models.CountUpTimer;
 import com.vanannek.minesweeper.models.Engine;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void startGame(GameMode gameMode) {
-        newGameImg.setImageDrawable(getResources().getDrawable(R.drawable.smile));
+        newGameImg.setImageDrawable( getResources().getDrawable(R.drawable.smile) );
         Engine.getInstance().init(this, gameMode);
         updateFlags();
         CountUpTimer.getInstance().reset();
@@ -87,14 +88,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         newGameImg.setOnClickListener(v -> {
+            ClickSound.getInstance().play();
             showSelectModeDialog();
             updateFlags();
         });
         settingImg.setOnClickListener(v -> {
             ClickSound.getInstance().play();
-            Intent intent = new Intent(this, SettingActivity.class);
-            startActivity(intent);
+            showSettingDialog();
         });
+    }
+
+    private void showSettingDialog() {
+        SettingDialog settingDialog = new SettingDialog();
+        settingDialog.show(getSupportFragmentManager(), "Select mode dialog");
     }
 
     private void updateFlags() {

@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -57,7 +59,7 @@ public class HistoryActivity extends AppCompatActivity implements HistoryListene
         emptyTxt = findViewById(R.id.emptyTxt);
         historyLayout = findViewById(R.id.historyLayout);
         backImg.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SettingActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
         binImg.setOnClickListener(v -> {
@@ -77,6 +79,12 @@ public class HistoryActivity extends AppCompatActivity implements HistoryListene
         ItemTouchHelper.Callback callback = new HistoryTouchHelper(HistoryActivity.this, this);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(historyRecyclerView);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     private void confirmDeleteAll() {
