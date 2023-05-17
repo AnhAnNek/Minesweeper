@@ -21,6 +21,9 @@ public final class Utils {
     public static final int MINUTE_PER_SECOND = 60;
     public static final int SECOND_PER_MILLISECOND = 1000;
 
+    public static final int aroundX[] = {-1, -1, -1, 0, 1, 1, 1, 0};
+    public static final int aroundY[] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
     public static final SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy HH:mm");
 
     public static String getCurrentDate() {

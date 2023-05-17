@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.utilities.Utils;
 
@@ -43,16 +46,18 @@ public class Engine {
 
     private Context context;
 
-    private GameMode gameMode;
-    private int flags, moves;
-    private boolean turnOnFlag = false;
+    private MutableLiveData<GameMode> gameMode;
+    private MutableLiveData<Integer> flags;
+    private int moves;
+    private MutableLiveData<Boolean> statusFlag;
     private int aroundX[] = {-1, -1, -1, 0, 1, 1, 1, 0};
     private int aroundY[] = {-1, 0, 1, 1, 1, 0, -1, -1};
     private int[][] minesTable;
     private Map<Integer, Drawable> images;
-    private ImageView[][] gameTable;
+    private MutableLiveData<ImageView[][]> gameTable;
 
     public void init(Context context, GameMode gameMode) {
+        statusFlag.postValue(false);
         setValues(context, gameMode);
         initImages();
         initGameTable();
@@ -61,15 +66,15 @@ public class Engine {
 
     private void setValues(Context context, GameMode gameMode) {
         this.context = context;
-        this.gameMode = gameMode;
-        this.flags = getMines();
-        this.moves = getRow() * getColumn() - getMines();
+        this.gameMode.postValue(gameMode);
+//        this.flags.postValue(getMines());
+//        this.moves = getRow() * getColumn() - getMines();
     }
 
     private void initImages() {
         Resources res = context.getResources();
         images = new HashMap<>();
-        images.put(MINES_CELL, res.getDrawable(R.drawable.bomb));
+        images.put(MINES_CELL, res.getDrawable(R.drawable.mines));
         images.put(FLAG_CELL, res.getDrawable(R.drawable.flag));
         images.put(UNTOUCHED_CELL, res.getDrawable(R.drawable.untouched));
         images.put(0, res.getDrawable(R.drawable.zero));
@@ -84,50 +89,50 @@ public class Engine {
     }
 
     private void initGameTable() {
-        gameTable = new ImageView[getRow()][getColumn()];
-        for (int i = 0; i < gameTable.length; i++) {
-            for (int j = 0; j < gameTable[0].length; j++) {
-                gameTable[i][j] = new ImageView(context);
-                gameTable[i][j].setTag(new Pair(i, j));
-                gameTable[i][j].setSoundEffectsEnabled(false);
-                gameTable[i][j].setOnClickListener((View.OnClickListener) context);
-            }
-        }
+//        gameTable.postValue(new ImageView[getRow()][getColumn()]);
+//        for (int i = 0; i < gameTable.getValue().length; i++) {
+//            for (int j = 0; j < gameTable.getValue()[0].length; j++) {
+//                gameTable.getValue()[i][j] = new ImageView(context);
+//                gameTable.getValue()[i][j].setTag(new Pair(i, j));
+//                gameTable.getValue()[i][j].setSoundEffectsEnabled(false);
+//                gameTable.getValue()[i][j].setOnClickListener((View.OnClickListener) context);
+//            }
+//        }
     }
 
     public void createGameTableLayout(TableLayout gameTableLayout, int cellSize, int cellPadding) {
-        gameTableLayout.removeAllViewsInLayout();
-        for (int i = 0; i < gameMode.ROW; i++) {
-            TableRow tableRow = new TableRow(context);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
-            tableRow.setGravity(Gravity.CENTER);
-            for (int j = 0; j < getColumn(); j++) {
-                gameTable[i][j].setLayoutParams(new TableRow.LayoutParams(cellSize, cellSize));
-                gameTable[i][j].setPadding(cellPadding, cellPadding, cellPadding, cellPadding);
-                gameTable[i][j].setBackground(
-                        context.getResources().getDrawable(R.drawable.background_primary_border));
-                tableRow.addView(gameTable[i][j]);
-            }
-            gameTableLayout.addView(tableRow, new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
-        }
+//        gameTableLayout.removeAllViewsInLayout();
+//        for (int i = 0; i < getRow(); i++) {
+//            TableRow tableRow = new TableRow(context);
+//            tableRow.setLayoutParams(new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
+//            tableRow.setGravity(Gravity.CENTER);
+//            for (int j = 0; j < getColumn(); j++) {
+//                gameTable.getValue()[i][j].setLayoutParams(new TableRow.LayoutParams(cellSize, cellSize));
+//                gameTable.getValue()[i][j].setPadding(cellPadding, cellPadding, cellPadding, cellPadding);
+//                gameTable.getValue()[i][j].setBackground(
+//                        context.getResources().getDrawable(R.drawable.background_primary_border));
+//                tableRow.addView(gameTable.getValue()[i][j]);
+//            }
+//            gameTableLayout.addView(tableRow, new TableRow.LayoutParams(cellSize * getColumn(), cellSize));
+//        }
     }
 
     public void startGame(int rowNoMines, int colNoMines) {
-        minesTable = new int[getRow()][getColumn()];
-        randomMines(rowNoMines, colNoMines);
-        generateNumber();
+//        minesTable = new int[getRow()][getColumn()];
+//        randomMines(rowNoMines, colNoMines);
+//        generateNumber();
     }
 
     private void randomMines(int rowNoMines, int colNoMines) {
-        int row, col, countMines = 0;
-        Random random = new Random();
-        while (countMines < getMines()) {
-            row = random.nextInt( getRow() );
-            col = random.nextInt( getColumn() );
-            if (isMines(row, col) || (row == rowNoMines && col == colNoMines)) continue;
-            minesTable[row][col] = MINES_CELL;
-            countMines++;
-        }
+//        int row, col, countMines = 0;
+//        Random random = new Random();
+//        while (countMines < getMines()) {
+//            row = random.nextInt( getRow() );
+//            col = random.nextInt( getColumn() );
+//            if (isMines(row, col) || (row == rowNoMines && col == colNoMines)) continue;
+//            minesTable[row][col] = MINES_CELL;
+//            countMines++;
+//        }
     }
 
     private void generateNumber() {
@@ -150,29 +155,29 @@ public class Engine {
     }
 
     private void refreshGameTable() {
-        for (int i = 0; i < gameTable.length; i++)
-            for (int j = 0; j < gameTable[0].length; j++)
-                gameTable[i][j].setImageDrawable( images.get(UNTOUCHED_CELL) );
+        for (int i = 0; i < gameTable.getValue().length; i++)
+            for (int j = 0; j < gameTable.getValue()[0].length; j++)
+                gameTable.getValue()[i][j].setImageDrawable( images.get(UNTOUCHED_CELL) );
     }
 
     public void refresh() {
-        this.flags = getMines();
-        this.moves = getRow() * getColumn() - getMines();
-        refreshGameTable();
+//        this.flags.postValue( getMines() );
+//        this.moves = getRow() * getColumn() - getMines();
+//        refreshGameTable();
     }
 
     public int openCellProcess(int row, int column) {
         boolean temp = untouched(row, column);
-        if (turnOnFlag) {
-            if (temp && flags > 0) {
-                gameTable[row][column].setImageDrawable( images.get(FLAG_CELL) );
-                flags--;
-            } else if (isFlag(row, column) && flags < getMines()) {
-                gameTable[row][column].setImageDrawable( images.get(UNTOUCHED_CELL) );
-                flags++;
-            }
-            return Utils.FLAG_CHANGE;
-        }
+//        if (statusFlag) {
+//            if (temp && flags.getValue() > 0) {
+//                gameTable.getValue()[row][column].setImageDrawable( images.get(FLAG_CELL) );
+//                flags.postValue( flags.getValue() - 1 );
+//            } else if (isFlag(row, column) && flags.getValue() < getMines()) {
+//                gameTable.getValue()[row][column].setImageDrawable( images.get(UNTOUCHED_CELL) );
+//                flags.postValue( flags.getValue() - 1 );
+//            }
+//            return Utils.FLAG_CHANGE;
+//        }
 
         if (temp && isMines(row, column)) {
             return Utils.LOST;
@@ -185,7 +190,7 @@ public class Engine {
     }
 
     private void show(int row, int col) {
-        gameTable[row][col].setImageDrawable( images.get(minesTable[row][col]) );
+        gameTable.getValue()[row][col].setImageDrawable( images.get(minesTable[row][col]) );
         moves--;
         if (minesTable[row][col] > 0) return;
         int i, j, nextI, nextJ;
@@ -199,7 +204,7 @@ public class Engine {
                 nextI = i + aroundX[k];
                 nextJ = j + aroundY[k];
                 if (!isValid(nextI, nextJ) || !untouched(nextI, nextJ)) continue;
-                gameTable[nextI][nextJ].setImageDrawable( images.get(minesTable[nextI][nextJ]) );
+                gameTable.getValue()[nextI][nextJ].setImageDrawable( images.get(minesTable[nextI][nextJ]) );
                 moves--;
                 if (minesTable[nextI][nextJ] > 0) continue;
                 positions.add(new Pair(nextI, nextJ));
@@ -208,9 +213,9 @@ public class Engine {
     }
 
     public void showAllMines() {
-        for (int i = 0; i < getRow(); i++)
-            for (int j = 0; j < getColumn(); j++)
-                gameTable[i][j].setImageDrawable( images.get(minesTable[i][j]) );
+//        for (int i = 0; i < getRow(); i++)
+//            for (int j = 0; j < getColumn(); j++)
+//                gameTable.getValue()[i][j].setImageDrawable( images.get(minesTable[i][j]) );
     }
 
     private boolean isWin() {
@@ -218,7 +223,8 @@ public class Engine {
     }
 
     private boolean isValid(int row, int col) {
-        return row >= 0 && row < getRow() && col >= 0 && col < getColumn();
+//        return row >= 0 && row < getRow() && col >= 0 && col < getColumn();
+        return true;
     }
 
     private boolean isMines(int row, int col) {
@@ -226,58 +232,55 @@ public class Engine {
     }
 
     private boolean untouched(int row, int col) {
-        return Utils.areEquals(gameTable[row][col].getDrawable(), images.get(UNTOUCHED_CELL));
+        return Utils.areEquals(gameTable.getValue()[row][col].getDrawable(), images.get(UNTOUCHED_CELL));
     }
 
     private boolean isFlag(int row, int col) {
-        return Utils.areEquals(gameTable[row][col].getDrawable(), images.get(FLAG_CELL));
+        return Utils.areEquals(gameTable.getValue()[row][col].getDrawable(), images.get(FLAG_CELL));
     }
 
     @Override
     public String toString() {
-        String result = "";
-        for (int i = 0; i < getRow(); i++) {
-            for (int j = 0; j < getColumn(); j++)
-                result += String.format("%3d ", minesTable[i][j]);
-            result += "\n";
-        }
-        return result;
+//        String result = "";
+//        for (int i = 0; i < getRow(); i++) {
+//            for (int j = 0; j < getColumn(); j++)
+//                result += String.format("%3d ", minesTable[i][j]);
+//            result += "\n";
+//        }
+//        return result;
+        return "";
     }
 
     // setters/getters
-    public int getRow() {
-        return gameMode.ROW;
-    }
-
-    public int getColumn() {
-        return gameMode.COLUMN;
-    }
-
-    public int getMines() {
-        return gameMode.MINES;
-    }
-
-    public GameMode getGameMode() {
-        return gameMode;
-    }
-
-    public int getFlags() {
-        return flags;
-    }
-
-    public int getMoves() {
-        return moves;
-    }
-
-    public boolean isTurnOnFlag() {
-        return turnOnFlag;
-    }
-
-    public void setTurnOnFlag(boolean turnOnFlag) {
-        this.turnOnFlag = turnOnFlag;
-    }
-
-    public ImageView[][] getGameTable() {
-        return gameTable;
-    }
+//    public int getRow() {
+//        return gameMode.getValue().ROW;
+//    }
+//
+//    public int getColumn() {
+//        return gameMode.getValue().COLUMN;
+//    }
+//
+//    public int getMines() {
+//        return gameMode.getValue().MINES;
+//    }
+//
+//    public LiveData<GameMode> getLiveDataGameMode() {
+//        return gameMode;
+//    }
+//
+//    public LiveData<Integer> getLiveDataFlags() {
+//        return flags;
+//    }
+//
+//    public int getMoves() {
+//        return moves;
+//    }
+//
+//    public LiveData<Boolean> getLiveDataStatusFlag() {
+//        return statusFlag;
+//    }
+//
+//    public LiveData<ImageView[][]> getLiveDataGameTable() {
+//        return gameTable;
+//    }
 }

@@ -1,7 +1,5 @@
 package com.vanannek.minesweeper.models;
 
-import java.io.Serializable;
-
 public enum GameMode {
     Easy(9, 9, 12),
     Normal(16, 9, 60),

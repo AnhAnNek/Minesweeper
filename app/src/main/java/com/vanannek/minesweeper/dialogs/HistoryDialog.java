@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,6 +95,7 @@ public class HistoryDialog extends AppCompatDialogFragment implements HistoryLis
         dialog.setYesButton(v -> {
             myDB.deleteAllData();
             reloadHistory();
+            dialog.dismiss();
         });
         dialog.setNoButton(v -> dialog.dismiss());
         dialog.create();
@@ -154,7 +154,8 @@ public class HistoryDialog extends AppCompatDialogFragment implements HistoryLis
         historyAdapter.removeItem(viewHolder.getAdapterPosition());
 
         // showing snack bar for undo
-        Snackbar snackbar = Snackbar.make(historyLayout, "You removed...!", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(historyLayout,
+                "You removed item...!", Snackbar.LENGTH_LONG);
         snackbar.setAction("UNDO", v -> {
             historyAdapter.restoreItem(deletedHistory, deletedIndex);
         });
