@@ -1,18 +1,26 @@
 package com.vanannek.minesweeper.database;
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
-import android.arch.persistence.room.DatabaseConfiguration;
-import android.arch.persistence.room.InvalidationTracker;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.annotation.NonNull;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 public class HistoryDatabase extends RoomDatabase {
+    @NonNull
     @Override
     protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
         return null;
     }
 
+    @NonNull
     @Override
     protected InvalidationTracker createInvalidationTracker() {
         return null;
+    }
+
+    @Override
+    public void clearAllTables() {
+
     }
 }

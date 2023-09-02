@@ -1,22 +1,18 @@
 package com.vanannek.minesweeper.viewmodels;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 
-import androidx.databinding.Bindable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.vanannek.minesweeper.database.MyDatabaseHelper;
 import com.vanannek.minesweeper.dialogs.SelectModeDialog;
-import com.vanannek.minesweeper.models.CountUpTimer;
-import com.vanannek.minesweeper.models.Engine;
-import com.vanannek.minesweeper.models.GameMode;
+import com.vanannek.minesweeper.enums.EMode;
 import com.vanannek.minesweeper.models.GameModel;
 
-public class MainViewModel
+public class MainViewModel extends ViewModel
         implements SelectModeDialog.SelectModeDialogListener {
 
     private final int CELL_DIMENSION = 100;
@@ -33,9 +29,8 @@ public class MainViewModel
 
     private MyDatabaseHelper myDB;
 
-
-
     public void createGameTableLayout(TableLayout gameTableLayout, int cellSize, int cellPadding) {
+        gameModel = new GameModel(EMode.Easy);
 //        gameTableLayout.removeAllViewsInLayout();
 //        for (int i = 0; i < getRow(); i++) {
 //            TableRow tableRow = new TableRow(context);
@@ -70,7 +65,7 @@ public class MainViewModel
 
 //    public void onClickFlagImg() {
 //        ClickSound.getInstance().play();
-        Engine engine = Engine.getInstance();
+//        Engine engine = Engine.getInstance();
 //        if (engine.isTurnOnFlag()) {
 //            engine.setTurnOnFlag(false);
 //            mFlagImageMutableData.postValue(R.drawable.red_flag_btn);
@@ -87,7 +82,7 @@ public class MainViewModel
 //    }
 
     private void printMinesTableInLog() {
-        Log.i("Main", Engine.getInstance().toString());
+//        Log.i("Main", Engine.getInstance().toString());
     }
 
     private void confirmGameLose() {
@@ -98,11 +93,11 @@ public class MainViewModel
     }
 
     private void showSelectModeDialog() {
-//        SelectModeDialog selectModeDialog = new SelectModeDialog();
-//        selectModeDialog.show(getSupportFragmentManager(), "Select mode dialog");
+        SelectModeDialog selectModeDialog = new SelectModeDialog();
+        selectModeDialog.show(getSupportFragmentManager(), "Select mode dialog");
     }
 
-    private void showSettingDialog() {
+    public void showSettingDialog() {
 //        SettingDialog settingDialog = new SettingDialog();
 //        settingDialog.show(getSupportFragmentManager(), "Select mode dialog");
     }
@@ -121,9 +116,9 @@ public class MainViewModel
     }
 
     private void confirmGameWin() {
-        CountUpTimer.getInstance().stop();
-        Engine.getInstance().showAllMines();
-        openWinDialog();
+//        CountUpTimer.getInstance().stop();
+//        Engine.getInstance().showAllMines();
+//        openWinDialog();
     }
 
     private void openWinDialog() {
@@ -150,7 +145,7 @@ public class MainViewModel
     }
 
     @Override
-    public void startGame(GameMode gameMode) {
+    public void startGame(EMode gameMode) {
 //        mLiveDataGameImg.postValue( getApplication().getResources().getDrawable(R.drawable.smile) );
 //        Engine.getInstance().init(getApplication(), gameMode);
 ////        updateFlags();
@@ -160,6 +155,18 @@ public class MainViewModel
     }
 
     public int getQtyFlags() {
+        gameModel = new GameModel(EMode.Easy);
         return gameModel.getQtyFlags();
+    }
+
+    public boolean isTurnOnFlag() {
+        return mLiveDataStatusFlag.getValue();
+    }
+
+    public void setTurnOnFlag(boolean turnOnFlag) {
+        mLiveDataStatusFlag.setValue(turnOnFlag);
+    }
+
+    public void updateFlags() {
     }
 }

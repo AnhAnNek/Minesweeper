@@ -13,7 +13,7 @@ import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.adapters.HistoryAdapter;
 import com.vanannek.minesweeper.listeners.HistoryListener;
 
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+//import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class HistoryTouchHelper extends ItemTouchHelper.Callback {
 
@@ -58,13 +58,13 @@ public class HistoryTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void onChildDraw (Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,float dX, float dY,int actionState, boolean isCurrentlyActive){
         // To limit the maximum width with a reduced dX
-        new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX / 3, dY, actionState, isCurrentlyActive)
-                .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.delete_color))
-                .addSwipeLeftActionIcon(R.drawable.ic_delete)
-                .addSwipeLeftLabel("Delete")
-                .setSwipeLeftLabelColor(ContextCompat.getColor(context, R.color.white))
-                .create()
-                .decorate();
+//        new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX / 3, dY, actionState, isCurrentlyActive)
+//                .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.delete_color))
+//                .addSwipeLeftActionIcon(R.drawable.ic_delete)
+//                .addSwipeLeftLabel("Delete")
+//                .setSwipeLeftLabelColor(ContextCompat.getColor(context, R.color.white))
+//                .create()
+//                .decorate();
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 

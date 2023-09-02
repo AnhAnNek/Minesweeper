@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.vanannek.minesweeper.R;
-import com.vanannek.minesweeper.models.GameMode;
+import com.vanannek.minesweeper.enums.EMode;
 
 public class SelectModeDialog extends AppCompatDialogFragment {
 
@@ -39,17 +39,17 @@ public class SelectModeDialog extends AppCompatDialogFragment {
 
     private void setListeners() {
         easyModeBtn.setOnClickListener(v -> {
-            listener.startGame(GameMode.Easy);
+            listener.startGame(EMode.Easy);
             dismiss();
             Log.i("SelectModeDialog", "EASY MODE");
         });
         normalModeBtn.setOnClickListener(v -> {
-            listener.startGame(GameMode.Normal);
+            listener.startGame(EMode.Normal);
             dismiss();
             Log.i("SelectModeDialog", "NORMAL MODE");
         });
         difficultModeBtn.setOnClickListener(v -> {
-            listener.startGame(GameMode.Difficult);
+            listener.startGame(EMode.Difficult);
             dismiss();
             Log.i("SelectModeDialog", "DIFFICULT MODE");
         });
@@ -68,6 +68,6 @@ public class SelectModeDialog extends AppCompatDialogFragment {
     }
 
     public interface SelectModeDialogListener {
-        void startGame(GameMode gameMode);
+        void startGame(EMode gameMode);
     }
 }

@@ -1,14 +1,16 @@
 package com.vanannek.minesweeper.activities;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.vanannek.minesweeper.R;
 import com.vanannek.minesweeper.databinding.ActivityMainBinding;
+import com.vanannek.minesweeper.models.ClickSound;
 import com.vanannek.minesweeper.viewmodels.MainViewModel;
+
+import java.security.Provider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,53 +20,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        // the same view binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        MainViewModel viewModel = new MainViewModel();
-        binding.setMainViewModel(viewModel);
+
         setContentView(binding.getRoot());
-        setToolbarListeners();
-        setObservers();
+
+        setOnCLicks();
     }
 
-    private void setToolbarListeners() {
+    private void setOnCLicks() {
         binding.flagImg.setOnClickListener(v -> {
-            viewModel.onClickFlagImg();
+            ClickSound.getInstance().play();
+            if (viewModel.isTurnOnFlag()) {
+                viewModel.setTurnOnFlag(false);
+                binding.flagImg.setImageDrawable(getResources().getDrawable(R.drawable.red_flag_btn));
+            } else {
+                viewModel.setTurnOnFlag(true);
+                binding.flagImg.setImageDrawable(getResources().getDrawable(R.drawable.green_flag_btn));
+            }
         });
+
         binding.newGameImg.setOnClickListener(v -> {
-//            viewModel.onClickSelectGameMode();
+            ClickSound.getInstance().play();
+            viewModel.showSelectModeDialog();
+            viewModel.updateFlags();
         });
+
         binding.settingImg.setOnClickListener(v -> {
-//            viewModel.onClickSettingImg();
+            ClickSound.getInstance().play();
+            viewModel.showSettingDialog();
         });
     }
 
-    private void setObservers() {
-//        viewModel.getLiveDataGameMode().observe(this, new Observer<GameMode>() {
-//            @Override
-//            public void onChanged(GameMode gameMode) {
-//                viewModel.startGame(gameMode);
-//            }
-//        });
-        viewModel.getLiveDataStatusFlag().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean statusFlag) {
-                int drawableId = statusFlag ? R.drawable.green_flag_btn : R.drawable.red_flag_btn;
-                binding.flagImg.setImageDrawable(getResources().getDrawable(drawableId));
-            }
-        });
-        viewModel.getLiveDataFlags().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                binding.flagsTxt.setText(integer);
-            }
-        });
-        viewModel.getLiveDataGameTable().observe(this, new Observer<ImageView[][]>() {
-            @Override
-            public void onChanged(ImageView[][] imageViews) {
-//                viewModel.createGameTableLayout(binding.minesTableLayout);
-            }
-        });
-    }
+
 }

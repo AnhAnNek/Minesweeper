@@ -1,5 +1,12 @@
 package com.vanannek.minesweeper.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CellModel {
     public static final int BLANK = -1;
     public static final int MINES = 0;
@@ -12,29 +19,5 @@ public class CellModel {
         this.value = value;
         isRevealed = false;
         isFlagged = false;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public boolean isRevealed() {
-        return isRevealed;
-    }
-
-    public void setRevealed(boolean revealed) {
-        isRevealed = revealed;
-    }
-
-    public boolean isFlagged() {
-        return isFlagged;
-    }
-
-    public void setFlagged(boolean flagged) {
-        isFlagged = flagged;
     }
 }

@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/toolbar_ll"
+        android:id="@+id/toolbarLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_12sdp">
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_300sdp"
         android:background="@color/white"
-        android:layout_below="@id/toolbar_ll">
+        android:layout_below="@id/toolbarLL">
 
         <RelativeLayout
             android:id="@+id/emptyRelativeLayout"
